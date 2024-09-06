@@ -1,0 +1,28 @@
+﻿@page "/upload"
+@using UnredactV2.Logic
+@inject DataLogic DataLogic
+
+<h3>Upload PDF</h3>
+
+@if (DataLogic.Uploading)
+{
+    <p>Uploading...</p>
+}
+else
+{
+    <EditForm Model="fileUploadModel" OnValidSubmit="DataLogic.HandleValidSubmit">
+        <InputFile OnChange="DataLogic.HandleFileSelected" />
+        <button type="submit">Upload</button>
+    </EditForm>
+}
+
+<p>@DataLogic.UploadResult</p>
+
+@code {
+    private FileUploadModel fileUploadModel = new FileUploadModel();
+
+    private class FileUploadModel
+    {
+        // Add any additional form fields if needed
+    }
+}

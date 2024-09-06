@@ -1,0 +1,61 @@
+﻿@page "/"
+@using UnredactV2.Services
+@using UnredactV2.Logic
+
+@inject BlobStorageService BlobStorageService
+@inject DataLogic DataLogic
+
+<PageTitle>Home</PageTitle>
+
+<h1>Unredact</h1>
+
+Please see recent uploads below.
+
+<div class="container">
+    <div class="row">
+        @if (blobs != null)
+
+        {
+            @foreach (var blob in blobs)
+
+            {
+                <div class="col-md-4 mb-4">
+                    <PhotoAndTitleCard ImageUrl="@($"https://unredactsa.blob.core.windows.net/unredactsacontainer/{blob}")"
+                                       PiiDetected="@DataLogic.DetermineIfPii()"
+                                       RedactionIneffective="@DataLogic.DetermineIfRedactionIneffective()"
+                                       SentimentNegative="@DataLogic.DetermineIfSentimentNegative()" />
+                </div>
+            }
+        }
+    </div>
+</div>
+
+@code {
+    private List<string> blobs;
+
+
+
+    protected override async Task OnInitializedAsync()
+
+    {
+
+        try
+
+        {
+
+            blobs = await BlobStorageService.ListBlobsAsync("unredactsacontainer");
+
+        }
+
+        catch (Exception ex)
+
+        {
+
+            // Handle the exception (e.g., log it, show a message to the user, etc.)
+
+            Console.WriteLine($"Error fetching blobs: {ex.Message}");
+
+        }
+
+    }
+}

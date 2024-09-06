@@ -1,0 +1,64 @@
+﻿@* @page "/photo-card" *@
+
+<style>
+    .card {
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        box-shadow: 2px 2px 12px rgba(0, 0, 0, 0.1);
+        max-width: 300px;
+        margin: 20px auto;
+        overflow: hidden;
+    }
+
+    .card img {
+        width: 100%;
+        height: auto;
+    }
+
+    .card-caption {
+        padding: 10px;
+        background-color: #f8f8f8;
+        text-align: center;
+        font-size: 1.1em;
+        color: #333;
+    }
+</style>
+
+<div class="card">
+    <img src="@ImageUrl" alt="Redacted FOIA image">
+    <div class="card-caption">
+        Title of Document
+    </div>
+    @if (PiiDetected)
+    {
+
+        <WarningPII />
+    }
+    @if (SentimentNegative)
+    {
+        <WarningSentimentNegative />
+    }
+    @if (RedactionIneffective)
+    {
+        <WarningRedactionIneffective />
+    }
+
+</div>
+
+
+
+@code {
+
+    [Parameter]
+    public bool PiiDetected { get; set; }
+
+    [Parameter]
+    public bool SentimentNegative { get; set; }
+
+    [Parameter]
+    public bool RedactionIneffective { get; set; }
+
+    [Parameter]
+    public string ImageUrl{ get; set; }
+
+}
