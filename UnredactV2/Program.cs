@@ -24,10 +24,15 @@ builder.Services.AddSingleton(sp =>
 builder.Services.AddScoped<BlobStorageService>();
 builder.Services.AddScoped<DataLogic>();
 
-builder.Services.AddSingleton<string?>(sp =>
+builder.Services.AddSingleton<string>(sp =>
 {
     var configuration = sp.GetRequiredService<IConfiguration>();
-    return configuration.GetSection("AzureBlobStorage")["ContainerName"];
+    var containerName = configuration.GetSection("AzureBlobStorage")["ContainerName"];
+    if (containerName == null)
+    {
+        throw new InvalidOperationException("Azure Blob Storage container name is not configured properly.");
+    }
+    return containerName;
 });
 
 var app = builder.Build();
