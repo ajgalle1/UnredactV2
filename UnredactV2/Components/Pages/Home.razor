@@ -9,11 +9,11 @@
 
 <h1>Unredact</h1>
 
-Please see recent uploads below.
+<p>Please see recent uploads below.</p>
 
 <div class="container">
     <div class="row">
-        @if (blobs != null)
+        @if (blobs != null && blobs.Any())
 
         {
             @foreach (var blob in blobs)
@@ -27,11 +27,17 @@ Please see recent uploads below.
                 </div>
             }
         }
+
+        else
+
+        {
+            <p>No uploads found.</p>
+        }
     </div>
 </div>
 
 @code {
-    private List<string> blobs;
+    private List<string> blobs = new List<string>();
 
 
 

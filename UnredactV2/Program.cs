@@ -14,9 +14,12 @@ builder.Services.AddSingleton(sp =>
 {
     var configuration = sp.GetRequiredService<IConfiguration>();
     var connectionString = configuration.GetSection("AzureBlobStorage")["ConnectionString"];
+    if (string.IsNullOrEmpty(connectionString))
+    {
+        throw new InvalidOperationException("Azure Blob Storage connection string is not configured properly.");
+    }
     return new BlobServiceClient(connectionString);
 });
-
 
 builder.Services.AddScoped<BlobStorageService>();
 builder.Services.AddScoped<DataLogic>();

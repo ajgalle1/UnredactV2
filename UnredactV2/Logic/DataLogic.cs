@@ -5,6 +5,7 @@ namespace UnredactV2.Logic
 {
     public class DataLogic
     {
+
         private readonly BlobStorageService _blobStorageService;
         private readonly string _containerName;
 
@@ -12,11 +13,12 @@ namespace UnredactV2.Logic
         {
             _blobStorageService = blobStorageService;
             _containerName = containerName;
+
         }
 
-        public IBrowserFile SelectedFile { get; private set; }
+        public IBrowserFile? SelectedFile { get; private set; }
         public bool Uploading { get; private set; }
-        public string UploadResult { get; private set; }
+        public string UploadResult { get; private set; } = string.Empty;
 
         public void HandleFileSelected(InputFileChangeEventArgs e)
         {
