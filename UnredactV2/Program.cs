@@ -21,7 +21,6 @@ builder.Services.AddSingleton(sp =>
     return new BlobServiceClient(connectionString);
 });
 
-
 builder.Services.AddScoped<BlobStorageService>();
 builder.Services.AddScoped<DataLogic>();
 
