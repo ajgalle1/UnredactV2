@@ -24,8 +24,7 @@ builder.Services.AddSingleton(sp =>
 builder.Services.AddScoped<BlobStorageService>();
 builder.Services.AddScoped<DataLogic>();
 
-// Register the container name from configuration
-builder.Services.AddSingleton(sp =>
+builder.Services.AddSingleton<string?>(sp =>
 {
     var configuration = sp.GetRequiredService<IConfiguration>();
     return configuration.GetSection("AzureBlobStorage")["ContainerName"];
