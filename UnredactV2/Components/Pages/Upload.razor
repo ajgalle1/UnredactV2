@@ -10,7 +10,7 @@
 }
 else
 {
-    <EditForm Model="fileUploadModel" OnValidSubmit="DataLogic.HandleValidSubmit">
+    <EditForm Model="fileUploadModel" OnValidSubmit="DataLogic.HandleValidSubmit" FormName="uploadForm">
         <InputFile OnChange="DataLogic.HandleFileSelected" />
         <button type="submit">Upload</button>
     </EditForm>
