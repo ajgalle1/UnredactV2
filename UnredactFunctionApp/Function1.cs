@@ -22,7 +22,7 @@ namespace UnredactFunctionApp
         }
 
         [FunctionName("Function1")]
-        public async Task Run([BlobTrigger("unredactsacontainer/{name}", Connection = "StorageConnection:blobServiceUri")] Stream myBlob, string name, ILogger log)
+        public async Task Run([BlobTrigger("unredactsacontainer/{name}", Connection = "StorageConnection")] Stream myBlob, string name, ILogger log)
         {
             log.LogInformation($"C# Blob trigger function Processed blob\n Name:{name} \n Size: {myBlob.Length} Bytes");
 
