@@ -22,7 +22,7 @@ namespace UnredactFunctionApp
         }
 
         [FunctionName("Function1")]
-        public async Task Run([BlobTrigger("samples-workitems/{name}", Connection = "StorageConnection:blobServiceUri")] Stream myBlob, string name, ILogger log)
+        public async Task Run([BlobTrigger("unredactsacontainer/{name}", Connection = "StorageConnection:blobServiceUri")] Stream myBlob, string name, ILogger log)
         {
             log.LogInformation($"C# Blob trigger function Processed blob\n Name:{name} \n Size: {myBlob.Length} Bytes");
 
@@ -32,15 +32,26 @@ namespace UnredactFunctionApp
 
             bool piiDetected = false;
 
-            foreach (AnalyzedDocument document in operation.Value.Documents)
+            // Access the AnalyzeResult from the operation
+            var analyzeResult = operation.Value;
+
+            // Iterate over the documents in the AnalyzeResult
+            foreach (var document in analyzeResult.Documents)
             {
-                foreach (var entity in document.Entities)
+                // Iterate over the key-value pairs in each document
+                foreach (var kvp in document.Fields)
                 {
-                    if (entity.Category == "PersonalIdentifiableInformation")
+                    var field = kvp.Value;
+                    if (field.FieldType == DocumentFieldType.String && field.Content.Contains("PII"))
                     {
                         piiDetected = true;
                         break;
                     }
+                }
+
+                if (piiDetected)
+                {
+                    break;
                 }
             }
 
@@ -53,7 +64,7 @@ namespace UnredactFunctionApp
 
         private async Task FlagBlob(string blobName)
         {
-            var containerClient = blobServiceClient.GetBlobContainerClient("samples-workitems");
+            var containerClient = blobServiceClient.GetBlobContainerClient("unredactsacontainer");
             var blobClient = containerClient.GetBlobClient(blobName);
 
             var metadata = new Dictionary<string, string>
